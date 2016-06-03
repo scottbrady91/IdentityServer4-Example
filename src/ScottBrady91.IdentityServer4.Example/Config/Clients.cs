@@ -25,7 +25,7 @@ namespace ScottBrady91.IdentityServer4.Example.Config
                 },
                 new Client
                 {
-                    ClientId = "clientCredentialsClient",
+                    ClientId = "oauthClient",
                     ClientName = "Example Client Credentials Client Application",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = new List<Secret> {new Secret("superSecretPassword".Sha256())},
