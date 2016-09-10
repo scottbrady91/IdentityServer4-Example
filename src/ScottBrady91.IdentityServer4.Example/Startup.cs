@@ -1,41 +1,31 @@
-﻿using System.IO;
-using System.Security.Cryptography.X509Certificates;
-using IdentityServer4.Core.Configuration;
+﻿using System.Collections.Generic;
+using IdentityServer4.Models;
+using IdentityServer4.Quickstart;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using ScottBrady91.IdentityServer4.Example.Config;
 
 namespace ScottBrady91.IdentityServer4.Example
 {
     public class Startup
     {
-        private readonly IHostingEnvironment environment;
-
-        public Startup(IHostingEnvironment env)
-        {
-            environment = env;
-        }
-        
         public void ConfigureServices(IServiceCollection services)
         {
-            var cert = new X509Certificate2(Path.Combine(environment.ContentRootPath, "idsrv3test.pfx"), "idsrv3test");
-
-            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-            services.AddIdentityServer(new IdentityServerOptions {SigningCertificate = cert})
-                .AddInMemoryClients(Clients.Get())
-                .AddInMemoryScopes(Scopes.Get())
-                .AddInMemoryUsers(Users.Get());
+            services.AddIdentityServer()
+                .AddInMemoryStores()
+                .SetTemporarySigningCredential()
+                .AddInMemoryClients(new List<Client>())
+                .AddInMemoryScopes(new List<Scope>())
+                .AddInMemoryUsers(new List<InMemoryUser>());
         }
 
-        public void Configure(IApplicationBuilder app, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            loggerFactory.AddConsole(LogLevel.Trace);
-            loggerFactory.AddDebug(LogLevel.Trace);
-            
+            loggerFactory.AddConsole();
+
+            app.UseDeveloperExceptionPage();
+
             app.UseIdentityServer();
         }
     }
