@@ -16,15 +16,21 @@ namespace ScottBrady91.IdentityServer4.Example
                 .AddInMemoryClients(Clients.Get())
                 .AddInMemoryScopes(Scopes.Get())
                 .AddInMemoryUsers(Users.Get());
+
+            services.AddMvc();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.AddConsole();
+            loggerFactory.AddDebug();
 
             app.UseDeveloperExceptionPage();
 
             app.UseIdentityServer();
+
+            app.UseStaticFiles();
+            app.UseMvcWithDefaultRoute();
         }
     }
 }
