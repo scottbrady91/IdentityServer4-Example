@@ -1,10 +1,8 @@
-﻿using System.Collections.Generic;
-using IdentityServer4.Models;
-using IdentityServer4.Quickstart;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using ScottBrady91.IdentityServer4.Example.Configuration;
 
 namespace ScottBrady91.IdentityServer4.Example
 {
@@ -15,9 +13,9 @@ namespace ScottBrady91.IdentityServer4.Example
             services.AddIdentityServer()
                 .AddInMemoryStores()
                 .SetTemporarySigningCredential()
-                .AddInMemoryClients(new List<Client>())
-                .AddInMemoryScopes(new List<Scope>())
-                .AddInMemoryUsers(new List<InMemoryUser>());
+                .AddInMemoryClients(Clients.Get())
+                .AddInMemoryScopes(Scopes.Get())
+                .AddInMemoryUsers(Users.Get());
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
