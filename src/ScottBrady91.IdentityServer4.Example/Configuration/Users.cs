@@ -14,7 +14,7 @@ namespace ScottBrady91.IdentityServer4.Example.Configuration
                 new InMemoryUser
                 {
                     Subject = "5BE86359-073C-434B-AD2D-A3932222DABE",
-                    Username = "scott@scottbrady91.com",
+                    Username = "scott",
                     Password = "password",
                     Claims = new List<Claim>
                     {
