@@ -17,9 +17,10 @@ namespace ScottBrady91.IdentityServer4.Example
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             // ASP.NET Identity DbContext
-            services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
-            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<IdentityDbContext>();
+            // ASP.NET Identity Registrations
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
                 //.AddInMemoryStores()
