@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ScottBrady91.IdentityServer4.Example.Configuration;
 using System.Reflection;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace ScottBrady91.IdentityServer4.Example
 {
@@ -15,16 +16,22 @@ namespace ScottBrady91.IdentityServer4.Example
             const string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;database=Test.IdentityServer4.EntityFramework;trusted_connection=yes;";
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
+            // ASP.NET Identity DbContext
+            services.AddDbContext<IdentityDbContext>(options => options.UseSqlServer(connectionString));
+
+            services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<IdentityDbContext>();
+
             services.AddIdentityServer()
-                //.AddInMemoryStores() // For In-Memory Persisted Grants
+                //.AddInMemoryStores()
                 .AddOperationalStore(
                     builder => builder.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly)))
-                .SetTemporarySigningCredential()
                 //.AddInMemoryClients(Clients.Get())
                 //.AddInMemoryScopes(Scopes.Get())
-                .AddOperationalStore(
+                .AddConfigurationStore(
                     builder => builder.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly)))
-                .AddInMemoryUsers(Users.Get());
+                //.AddInMemoryUsers(Users.Get())
+                .AddAspNetIdentity<IdentityUser>()
+                .SetTemporarySigningCredential();
 
             services.AddMvc();
         }
