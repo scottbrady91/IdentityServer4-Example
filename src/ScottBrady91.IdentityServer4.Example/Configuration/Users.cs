@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using IdentityModel;
-using IdentityServer4.Quickstart;
+using IdentityServer4.Services.InMemory;
 
 namespace ScottBrady91.IdentityServer4.Example.Configuration
 {

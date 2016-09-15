@@ -12,6 +12,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using IdentityServer4.Services.InMemory;
 
 namespace IdentityServer4.Quickstart.UI.Controllers
 {
