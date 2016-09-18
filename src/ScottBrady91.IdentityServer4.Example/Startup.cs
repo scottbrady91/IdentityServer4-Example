@@ -9,6 +9,8 @@ using IdentityServer4.EntityFramework.DbContexts;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Linq;
 using IdentityServer4.EntityFramework.Mappers;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace ScottBrady91.IdentityServer4.Example
 {
@@ -84,9 +86,9 @@ namespace ScottBrady91.IdentityServer4.Example
                     }
                     context.SaveChanges();
                 }
-
-                var identityDbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-                if (!identityDbContext.Users.Any())
+                
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                if (!userManager.Users.Any())
                 {
                     foreach (var inMemoryUser in Users.Get())
                     {
@@ -101,14 +103,12 @@ namespace ScottBrady91.IdentityServer4.Example
                             {
                                 UserId = identityUser.Id,
                                 ClaimType = claim.Type,
-                                ClaimValue = claim.Value
+                                ClaimValue = claim.Value,
                             });
                         }
 
-                        identityDbContext.Users.Add(identityUser);
+                        var identityResult = userManager.CreateAsync(identityUser, "Password123!").Result;
                     }
-
-                    identityDbContext.SaveChanges();
                 }
             }
         }

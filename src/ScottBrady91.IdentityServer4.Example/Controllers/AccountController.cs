@@ -13,6 +13,8 @@ using System.Security.Claims;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using IdentityServer4.Services.InMemory;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace IdentityServer4.Quickstart.UI.Controllers
 {
@@ -23,14 +25,17 @@ namespace IdentityServer4.Quickstart.UI.Controllers
     /// </summary>
     public class AccountController : Controller
     {
-        private readonly InMemoryUserLoginService _loginService;
+        private readonly UserManager<IdentityUser> _userManager;
+        //private readonly InMemoryUserLoginService _loginService;
         private readonly IIdentityServerInteractionService _interaction;
 
         public AccountController(
-            InMemoryUserLoginService loginService,
+            UserManager<IdentityUser> userManager,
+            //InMemoryUserLoginService loginService,
             IIdentityServerInteractionService interaction)
         {
-            _loginService = loginService;
+            _userManager = userManager;
+            //_loginService = loginService;
             _interaction = interaction;
         }
 
@@ -61,6 +66,8 @@ namespace IdentityServer4.Quickstart.UI.Controllers
         {
             if (ModelState.IsValid)
             {
+                /*
+                // IN-MEMORY USERS
                 // validate username/password against in-memory store
                 if (_loginService.ValidateCredentials(model.Username, model.Password))
                 {
@@ -77,7 +84,26 @@ namespace IdentityServer4.Quickstart.UI.Controllers
                     return Redirect("~/");
                 }
 
+                ModelState.AddModelError("", "Invalid username or password.");*/
+
+
+                // ASP.NET IDENTITY USERS
+                var identityUser = await _userManager.FindByNameAsync(model.Username);
+
+                if (identityUser != null && await _userManager.CheckPasswordAsync(identityUser, model.Password))
+                {
+                    await HttpContext.Authentication.SignInAsync(identityUser.Id, identityUser.UserName);
+
+                    if (_interaction.IsValidReturnUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+
+                    return Redirect("~/");
+                }
+
                 ModelState.AddModelError("", "Invalid username or password.");
+
             }
 
             // something went wrong, show form with error
@@ -138,6 +164,9 @@ namespace IdentityServer4.Quickstart.UI.Controllers
             var provider = userIdClaim.Issuer;
             var userId = userIdClaim.Value;
 
+
+            /*
+            //IN-MEMORY USERS
             // check if the external user is already provisioned
             var user = _loginService.FindByExternalProvider(provider, userId);
             if (user == null)
@@ -157,10 +186,35 @@ namespace IdentityServer4.Quickstart.UI.Controllers
             }
 
             // issue authentication cookie for user
-            await HttpContext.Authentication.SignInAsync(user.Subject, user.Username, provider, additionalClaims.ToArray());
+            await HttpContext.Authentication.SignInAsync(user.Subject, user.Username, provider, additionalClaims.ToArray());*/
+
+
+            // ASP.NET IDENTITY USERS
+            // check if the external user is already provisioned
+            var user = await _userManager.FindByLoginAsync(provider, userId);
+            if (user == null)
+            {
+                user = new IdentityUser { UserName = Guid.NewGuid().ToString() };
+                await _userManager.CreateAsync(user);
+
+                await _userManager.AddLoginAsync(user, new UserLoginInfo(provider, userId, provider));
+            }
+
+            var additionalClaims = new List<Claim>();
+
+            // if the external system sent a session id claim, copy it over
+            var sid = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
+            if (sid != null)
+            {
+                additionalClaims.Add(new Claim(JwtClaimTypes.SessionId, sid.Value));
+            }
+
+            // issue authentication cookie for user
+            await HttpContext.Authentication.SignInAsync(user.Id, user.UserName, provider, additionalClaims.ToArray());
 
             // delete temporary cookie used during external authentication
             await HttpContext.Authentication.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
+
 
             // validate return URL and redirect back to authorization endpoint
             if (_interaction.IsValidReturnUrl(returnUrl))
