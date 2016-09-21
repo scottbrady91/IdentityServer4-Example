@@ -10,7 +10,6 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System.Linq;
 using IdentityServer4.EntityFramework.Mappers;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace ScottBrady91.IdentityServer4.Example
 {
@@ -107,7 +106,7 @@ namespace ScottBrady91.IdentityServer4.Example
                             });
                         }
 
-                        var identityResult = userManager.CreateAsync(identityUser, "Password123!").Result;
+                        userManager.CreateAsync(identityUser, "Password123!").Wait();
                     }
                 }
             }
