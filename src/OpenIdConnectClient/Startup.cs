@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -55,8 +56,9 @@ namespace OpenIdConnectClient
             app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
             {
                 ClientId = "openIdConnectClient",
-                Authority = "https://localhost:44350",
-                SignInScheme = "cookie"
+                Authority = "http://localhost:5000",
+                SignInScheme = "cookie",
+                RequireHttpsMetadata = false
             });
 
             app.UseStaticFiles();

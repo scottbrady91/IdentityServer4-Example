@@ -9,7 +9,7 @@ namespace ScottBrady91.IdentityServer4.Example
         {
             var host = new WebHostBuilder()
                 .UseKestrel()
-                .UseUrls("https://localhost:44350")
+                .UseUrls("http://localhost:5000")
                 .UseContentRoot(Directory.GetCurrentDirectory())
                 .UseIISIntegration()
                 .UseStartup<Startup>()

@@ -28,7 +28,6 @@ namespace ScottBrady91.IdentityServer4.Example
             services.AddIdentity<IdentityUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddIdentityServer()
-                //.AddInMemoryStores()
                 .AddOperationalStore(
                     builder => builder.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly)))
                 //.AddInMemoryClients(Clients.Get())
@@ -37,7 +36,7 @@ namespace ScottBrady91.IdentityServer4.Example
                     builder => builder.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly)))
                 //.AddInMemoryUsers(Users.Get())
                 .AddAspNetIdentity<IdentityUser>()
-                .SetTemporarySigningCredential();
+                .AddTemporarySigningCredential();
 
             services.AddMvc();
         }
@@ -77,11 +76,20 @@ namespace ScottBrady91.IdentityServer4.Example
                     context.SaveChanges();
                 }
 
-                if (!context.Scopes.Any())
+                if (!context.IdentityResources.Any())
                 {
-                    foreach (var client in Scopes.Get())
+                    foreach (var resource in Resources.GetIdentityResources())
                     {
-                        context.Scopes.Add(client.ToEntity());
+                        context.IdentityResources.Add(resource.ToEntity());
+                    }
+                    context.SaveChanges();
+                }
+
+                if (!context.ApiResources.Any())
+                {
+                    foreach (var resource in Resources.GetApiResources())
+                    {
+                        context.ApiResources.Add(resource.ToEntity());
                     }
                     context.SaveChanges();
                 }

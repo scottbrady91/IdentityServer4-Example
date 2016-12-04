@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using IdentityServer4;
 using IdentityServer4.Models;
 
 namespace ScottBrady91.IdentityServer4.Example.Configuration
@@ -27,10 +28,10 @@ namespace ScottBrady91.IdentityServer4.Example.Configuration
                     AllowedGrantTypes = GrantTypes.Implicit,
                     AllowedScopes = new List<string>
                     {
-                        StandardScopes.OpenId.Name,
-                        StandardScopes.Profile.Name,
-                        StandardScopes.Email.Name,
-                        StandardScopes.Roles.Name,
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        IdentityServerConstants.StandardScopes.Email,
+                        "role",
                         "customAPI"
                     },
                     RedirectUris = new List<string> {"https://localhost:44330/signin-oidc"},
