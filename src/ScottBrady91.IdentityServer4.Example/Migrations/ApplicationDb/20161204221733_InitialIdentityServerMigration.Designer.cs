@@ -8,7 +8,7 @@ using ScottBrady91.IdentityServer4.Example;
 namespace ScottBrady91.IdentityServer4.Example.Migrations.ApplicationDb
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160915120208_InitialIdentityServerMigration")]
+    [Migration("20161204221733_InitialIdentityServerMigration")]
     partial class InitialIdentityServerMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

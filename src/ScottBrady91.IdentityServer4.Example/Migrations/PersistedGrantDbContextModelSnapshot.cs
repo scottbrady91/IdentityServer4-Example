@@ -18,9 +18,11 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.PersistedGrant", b =>
                 {
-                    b.Property<string>("Key");
+                    b.Property<string>("Key")
+                        .HasAnnotation("MaxLength", 200);
 
-                    b.Property<string>("Type");
+                    b.Property<string>("Type")
+                        .HasAnnotation("MaxLength", 50);
 
                     b.Property<string>("ClientId")
                         .IsRequired()
@@ -33,9 +35,16 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations
 
                     b.Property<DateTime>("Expiration");
 
-                    b.Property<string>("SubjectId");
+                    b.Property<string>("SubjectId")
+                        .HasAnnotation("MaxLength", 200);
 
                     b.HasKey("Key", "Type");
+
+                    b.HasIndex("SubjectId");
+
+                    b.HasIndex("SubjectId", "ClientId");
+
+                    b.HasIndex("SubjectId", "ClientId", "Type");
 
                     b.ToTable("PersistedGrants");
                 });
