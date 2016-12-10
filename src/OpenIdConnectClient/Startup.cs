@@ -56,7 +56,7 @@ namespace OpenIdConnectClient
             app.UseOpenIdConnectAuthentication(new OpenIdConnectOptions
             {
                 ClientId = "openIdConnectClient",
-                Authority = "http://localhost:5000",
+                Authority = "https://localhost:44350",
                 SignInScheme = "cookie",
                 RequireHttpsMetadata = false
             });

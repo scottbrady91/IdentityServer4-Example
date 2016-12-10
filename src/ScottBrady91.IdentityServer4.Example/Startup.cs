@@ -31,7 +31,8 @@ namespace ScottBrady91.IdentityServer4.Example
                 .AddOperationalStore(
                     builder => builder.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly)))
                 //.AddInMemoryClients(Clients.Get())
-                //.AddInMemoryScopes(Scopes.Get())
+                //.AddInMemoryIdentityResources(Resources.GetIdentityResources())
+                //.AddInMemoryApiResources(Resources.GetApiResources())
                 .AddConfigurationStore(
                     builder => builder.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly)))
                 //.AddInMemoryUsers(Users.Get())

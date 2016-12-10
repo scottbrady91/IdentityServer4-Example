@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace ScottBrady91.IdentityServer4.Example.Migrations.ApplicationDb
+namespace ScottBrady91.IdentityServer4.Example.Migrations.Identity
 {
     public partial class InitialIdentityServerMigration : Migration
     {
@@ -151,7 +151,8 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ApplicationDb
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 table: "AspNetRoles",
-                column: "NormalizedName");
+                column: "NormalizedName",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -183,11 +184,6 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ApplicationDb
                 name: "IX_AspNetUserRoles_RoleId",
                 table: "AspNetUserRoles",
                 column: "RoleId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_AspNetUserRoles_UserId",
-                table: "AspNetUserRoles",
-                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

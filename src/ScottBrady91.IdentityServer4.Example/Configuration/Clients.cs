@@ -19,7 +19,7 @@ namespace ScottBrady91.IdentityServer4.Example.Configuration
                     {
                         new Secret("superSecretPassword".Sha256())
                     },
-                    AllowedScopes = new List<string> {"customAPI"}
+                    AllowedScopes = new List<string> {"customAPI.read"}
                 },
                 new Client
                 {

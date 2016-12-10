@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace ScottBrady91.IdentityServer4.Example.Migrations
+namespace ScottBrady91.IdentityServer4.Example.Migrations.PersistedGrants
 {
     public partial class InitialIdentityServerMigration : Migration
     {

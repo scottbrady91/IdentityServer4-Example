@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using IdentityServer4.EntityFramework.DbContexts;
 
-namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
+namespace ScottBrady91.IdentityServer4.Example.Migrations.Configuration
 {
     [DbContext(typeof(ConfigurationDbContext))]
     partial class ConfigurationDbContextModelSnapshot : ModelSnapshot
@@ -13,7 +13,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.1")
+                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.ApiResource", b =>
@@ -22,16 +22,16 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description")
-                        .HasAnnotation("MaxLength", 1000);
+                        .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.Property<bool>("Enabled");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
@@ -51,7 +51,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
@@ -69,16 +69,16 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
                         .IsRequired();
 
                     b.Property<string>("Description")
-                        .HasAnnotation("MaxLength", 1000);
+                        .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.Property<bool>("Emphasize");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.Property<bool>("Required");
 
@@ -104,7 +104,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
@@ -122,15 +122,15 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
                         .IsRequired();
 
                     b.Property<string>("Description")
-                        .HasAnnotation("MaxLength", 1000);
+                        .HasMaxLength(1000);
 
                     b.Property<DateTime?>("Expiration");
 
                     b.Property<string>("Type")
-                        .HasAnnotation("MaxLength", 250);
+                        .HasMaxLength(250);
 
                     b.Property<string>("Value")
-                        .HasAnnotation("MaxLength", 2000);
+                        .HasMaxLength(2000);
 
                     b.HasKey("Id");
 
@@ -164,13 +164,13 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.Property<string>("ClientName")
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.Property<string>("ClientUri")
-                        .HasAnnotation("MaxLength", 2000);
+                        .HasMaxLength(2000);
 
                     b.Property<bool>("EnableLocalLogin");
 
@@ -190,7 +190,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("ProtocolType")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.Property<int>("RefreshTokenExpiration");
 
@@ -224,11 +224,11 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 250);
+                        .HasMaxLength(250);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 250);
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
@@ -247,7 +247,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("Origin")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 150);
+                        .HasMaxLength(150);
 
                     b.HasKey("Id");
 
@@ -266,7 +266,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("GrantType")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 250);
+                        .HasMaxLength(250);
 
                     b.HasKey("Id");
 
@@ -285,7 +285,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("Provider")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
@@ -304,7 +304,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("PostLogoutRedirectUri")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 2000);
+                        .HasMaxLength(2000);
 
                     b.HasKey("Id");
 
@@ -323,7 +323,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("RedirectUri")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 2000);
+                        .HasMaxLength(2000);
 
                     b.HasKey("Id");
 
@@ -342,7 +342,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("Scope")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
@@ -360,16 +360,16 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
                         .IsRequired();
 
                     b.Property<string>("Description")
-                        .HasAnnotation("MaxLength", 2000);
+                        .HasMaxLength(2000);
 
                     b.Property<DateTime?>("Expiration");
 
                     b.Property<string>("Type")
-                        .HasAnnotation("MaxLength", 250);
+                        .HasMaxLength(250);
 
                     b.Property<string>("Value")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 2000);
+                        .HasMaxLength(2000);
 
                     b.HasKey("Id");
 
@@ -388,7 +388,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("Type")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.HasKey("Id");
 
@@ -403,10 +403,10 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
                         .ValueGeneratedOnAdd();
 
                     b.Property<string>("Description")
-                        .HasAnnotation("MaxLength", 1000);
+                        .HasMaxLength(1000);
 
                     b.Property<string>("DisplayName")
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.Property<bool>("Emphasize");
 
@@ -414,7 +414,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations.ConfigurationDb
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.Property<bool>("Required");
 

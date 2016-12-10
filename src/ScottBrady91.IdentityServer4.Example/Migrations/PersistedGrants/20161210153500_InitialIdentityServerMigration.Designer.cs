@@ -5,29 +5,29 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using IdentityServer4.EntityFramework.DbContexts;
 
-namespace ScottBrady91.IdentityServer4.Example.Migrations
+namespace ScottBrady91.IdentityServer4.Example.Migrations.PersistedGrants
 {
     [DbContext(typeof(PersistedGrantDbContext))]
-    [Migration("20161204221704_InitialIdentityServerMigration")]
+    [Migration("20161210153500_InitialIdentityServerMigration")]
     partial class InitialIdentityServerMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
-                .HasAnnotation("ProductVersion", "1.0.1")
+                .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
             modelBuilder.Entity("IdentityServer4.EntityFramework.Entities.PersistedGrant", b =>
                 {
                     b.Property<string>("Key")
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.Property<string>("Type")
-                        .HasAnnotation("MaxLength", 50);
+                        .HasMaxLength(50);
 
                     b.Property<string>("ClientId")
                         .IsRequired()
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.Property<DateTime>("CreationTime");
 
@@ -37,7 +37,7 @@ namespace ScottBrady91.IdentityServer4.Example.Migrations
                     b.Property<DateTime>("Expiration");
 
                     b.Property<string>("SubjectId")
-                        .HasAnnotation("MaxLength", 200);
+                        .HasMaxLength(200);
 
                     b.HasKey("Key", "Type");
 
