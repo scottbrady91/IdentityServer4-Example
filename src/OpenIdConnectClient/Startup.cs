@@ -57,8 +57,7 @@ namespace OpenIdConnectClient
             {
                 ClientId = "openIdConnectClient",
                 Authority = "https://localhost:44350",
-                SignInScheme = "cookie",
-                RequireHttpsMetadata = false
+                SignInScheme = "cookie"
             });
 
             app.UseStaticFiles();

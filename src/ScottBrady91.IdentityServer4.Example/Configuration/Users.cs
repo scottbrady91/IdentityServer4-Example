@@ -19,7 +19,7 @@ namespace ScottBrady91.IdentityServer4.Example.Configuration
                     Claims = new List<Claim>
                     {
                         new Claim(JwtClaimTypes.Email, "scott@scottbrady91.com"),
-                        new Claim(JwtClaimTypes.Role, "Badmin")
+                        new Claim(JwtClaimTypes.Role, "admin")
                     }
                 }
             };
