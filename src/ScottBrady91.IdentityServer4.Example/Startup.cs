@@ -18,7 +18,7 @@ namespace ScottBrady91.IdentityServer4.Example
         public void ConfigureServices(IServiceCollection services)
         {
             const string connectionString =
-                @"Data Source=(LocalDb)\MSSQLLocalDB;database=ScottBrady91.IdentityServer4.Example;trusted_connection=yes;";
+                @"Data Source=(LocalDb)\MSSQLLocalDB;database=ScottBrady91.IdentityServer4.Example2;trusted_connection=yes;";
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             // ASP.NET Identity DbContext
@@ -35,7 +35,7 @@ namespace ScottBrady91.IdentityServer4.Example
                 //.AddInMemoryApiResources(Resources.GetApiResources())
                 .AddConfigurationStore(
                     builder => builder.UseSqlServer(connectionString, options => options.MigrationsAssembly(migrationsAssembly)))
-                //.AddInMemoryUsers(Users.Get())
+                //.AddTestUsers(Users.Get())
                 .AddAspNetIdentity<IdentityUser>()
                 .AddTemporarySigningCredential();
 
@@ -102,7 +102,7 @@ namespace ScottBrady91.IdentityServer4.Example
                     {
                         var identityUser = new IdentityUser(inMemoryUser.Username)
                         {
-                            Id = inMemoryUser.Subject
+                            Id = inMemoryUser.SubjectId
                         };
 
                         foreach (var claim in inMemoryUser.Claims)
