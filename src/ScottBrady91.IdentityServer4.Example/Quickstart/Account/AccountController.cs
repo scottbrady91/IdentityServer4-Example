@@ -18,6 +18,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using IdentityServer4.Events;
 using IdentityServer4.Extensions;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace IdentityServer4.Quickstart.UI
 {
@@ -29,7 +31,7 @@ namespace IdentityServer4.Quickstart.UI
     [SecurityHeaders]
     public class AccountController : Controller
     {
-        private readonly TestUserStore _users;
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IEventService _events;
         private readonly AccountService _account;
@@ -39,10 +41,10 @@ namespace IdentityServer4.Quickstart.UI
             IClientStore clientStore,
             IHttpContextAccessor httpContextAccessor,
             IEventService events,
-            TestUserStore users = null)
+            UserManager<IdentityUser> userManager)
         {
-            // if the TestUserStore is not in DI, then we'll just use the global users collection
-            _users = users ?? new TestUserStore(TestUsers.Users);
+            
+            _userManager = userManager;
             _interaction = interaction;
             _events = events;
             _account = new AccountService(interaction, httpContextAccessor, clientStore);
@@ -65,7 +67,50 @@ namespace IdentityServer4.Quickstart.UI
             return View(vm);
         }
 
-        /// <summary>
+        /* ASP.NET CORE IDENTITY VERSION */
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login(LoginInputModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var identityUser = await _userManager.FindByNameAsync(model.Username);
+
+                if (identityUser != null && await _userManager.CheckPasswordAsync(identityUser, model.Password))
+                {
+                    AuthenticationProperties props = null;
+
+                    if (AccountOptions.AllowRememberLogin && model.RememberLogin)
+                    {
+                        props = new AuthenticationProperties
+                        {
+                            IsPersistent = true,
+                            ExpiresUtc = DateTimeOffset.UtcNow.Add(AccountOptions.RememberMeLoginDuration)
+                        };
+                    };
+
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(identityUser.UserName, identityUser.Id, identityUser.UserName));
+                    await HttpContext.Authentication.SignInAsync(identityUser.Id, identityUser.UserName, props);
+
+                    if (_interaction.IsValidReturnUrl(model.ReturnUrl) || Url.IsLocalUrl(model.ReturnUrl))
+                    {
+                        return Redirect(model.ReturnUrl);
+                    }
+
+                    return Redirect("~/");
+                }
+
+                await _events.RaiseAsync(new UserLoginFailureEvent(model.Username, "invalid credentials"));
+
+                ModelState.AddModelError("", AccountOptions.InvalidCredentialsErrorMessage);
+            }
+            
+            var vm = await _account.BuildLoginViewModelAsync(model);
+            return View(vm);
+        }
+
+        /* TESTUSERSTORE VERSION */
+        /*/// <summary>
         /// Handle postback from username/password login
         /// </summary>
         [HttpPost]
@@ -111,7 +156,7 @@ namespace IdentityServer4.Quickstart.UI
             // something went wrong, show form with error
             var vm = await _account.BuildLoginViewModelAsync(model);
             return View(vm);
-        }
+        }*/
 
         /// <summary>
         /// initiate roundtrip to external authentication provider
@@ -164,7 +209,72 @@ namespace IdentityServer4.Quickstart.UI
             }
         }
 
-        /// <summary>
+        /* ASP.NET CORE IDENTITY VERSION */
+        [HttpGet]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl)
+        {
+            var info = await HttpContext.Authentication.GetAuthenticateInfoAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
+            var tempUser = info?.Principal;
+            if (tempUser == null)
+            {
+                throw new Exception("External authentication error");
+            }
+
+            var claims = tempUser.Claims.ToList();
+
+            var userIdClaim = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Subject);
+            if (userIdClaim == null)
+            {
+                userIdClaim = claims.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
+            }
+            if (userIdClaim == null)
+            {
+                throw new Exception("Unknown userid");
+            }
+
+            claims.Remove(userIdClaim);
+            var provider = info.Properties.Items["scheme"];
+            var userId = userIdClaim.Value;
+
+            var user = await _userManager.FindByLoginAsync(provider, userId);
+            if (user == null)
+            {
+                user = new IdentityUser { UserName = Guid.NewGuid().ToString() };
+                await _userManager.CreateAsync(user);
+                await _userManager.AddLoginAsync(user, new UserLoginInfo(provider, userId, provider));
+            }
+
+            var additionalClaims = new List<Claim>();
+            
+            var sid = claims.FirstOrDefault(x => x.Type == JwtClaimTypes.SessionId);
+            if (sid != null)
+            {
+                additionalClaims.Add(new Claim(JwtClaimTypes.SessionId, sid.Value));
+            }
+            
+            AuthenticationProperties props = null;
+            var id_token = info.Properties.GetTokenValue("id_token");
+            if (id_token != null)
+            {
+                props = new AuthenticationProperties();
+                props.StoreTokens(new[] { new AuthenticationToken { Name = "id_token", Value = id_token } });
+            }
+            
+            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, userId, user.Id, user.UserName));
+            await HttpContext.Authentication.SignInAsync(user.Id, user.UserName, provider, additionalClaims.ToArray());
+
+            await HttpContext.Authentication.SignOutAsync(IdentityServer4.IdentityServerConstants.ExternalCookieAuthenticationScheme);
+
+            if (_interaction.IsValidReturnUrl(returnUrl) || Url.IsLocalUrl(returnUrl))
+            {
+                return Redirect(returnUrl);
+            }
+
+            return Redirect("~/");
+        }
+
+        /* TESTUSERSTORE VERSION */
+        /*/// <summary>
         /// Post processing of external authentication
         /// </summary>
         [HttpGet]
@@ -240,7 +350,7 @@ namespace IdentityServer4.Quickstart.UI
             }
 
             return Redirect("~/");
-        }
+        }*/
 
         /// <summary>
         /// Show logout page

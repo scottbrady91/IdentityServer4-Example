@@ -98,14 +98,14 @@ namespace ScottBrady91.IdentityServer4.Example
                 var userManager = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
                 if (!userManager.Users.Any())
                 {
-                    foreach (var inMemoryUser in Users.Get())
+                    foreach (var testUser in Users.Get())
                     {
-                        var identityUser = new IdentityUser(inMemoryUser.Username)
+                        var identityUser = new IdentityUser(testUser.Username)
                         {
-                            Id = inMemoryUser.SubjectId
+                            Id = testUser.SubjectId
                         };
 
-                        foreach (var claim in inMemoryUser.Claims)
+                        foreach (var claim in testUser.Claims)
                         {
                             identityUser.Claims.Add(new IdentityUserClaim<string>
                             {
