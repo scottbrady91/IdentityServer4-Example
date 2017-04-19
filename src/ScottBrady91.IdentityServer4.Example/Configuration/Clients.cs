@@ -32,7 +32,7 @@ namespace ScottBrady91.IdentityServer4.Example.Configuration
                         IdentityServerConstants.StandardScopes.Profile,
                         IdentityServerConstants.StandardScopes.Email,
                         "role",
-                        "customAPI"
+                        "customAPI.write"
                     },
                     RedirectUris = new List<string> {"https://localhost:44330/signin-oidc"},
                     PostLogoutRedirectUris = new List<string> { "https://localhost:44330" }
