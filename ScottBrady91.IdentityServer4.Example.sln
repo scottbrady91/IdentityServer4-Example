@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0F61FE42-8DDD-41A8-8512-0952CB4A3C11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScottBrady91.IdentityServer4.Example", "src\ScottBrady91.IdentityServer4.Example\ScottBrady91.IdentityServer4.Example.csproj", "{23EDCA77-C09E-490E-A225-0ED4490C31D2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenIdConnectClient", "src\OpenIdConnectClient\OpenIdConnectClient.csproj", "{28D0F7A1-7CE5-4FC4-A435-8A14AFB481D9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{23EDCA77-C09E-490E-A225-0ED4490C31D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23EDCA77-C09E-490E-A225-0ED4490C31D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23EDCA77-C09E-490E-A225-0ED4490C31D2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23EDCA77-C09E-490E-A225-0ED4490C31D2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28D0F7A1-7CE5-4FC4-A435-8A14AFB481D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28D0F7A1-7CE5-4FC4-A435-8A14AFB481D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28D0F7A1-7CE5-4FC4-A435-8A14AFB481D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28D0F7A1-7CE5-4FC4-A435-8A14AFB481D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{23EDCA77-C09E-490E-A225-0ED4490C31D2} = {0F61FE42-8DDD-41A8-8512-0952CB4A3C11}
+		{28D0F7A1-7CE5-4FC4-A435-8A14AFB481D9} = {0F61FE42-8DDD-41A8-8512-0952CB4A3C11}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {EA09D90D-25ED-46F3-99AC-833B67B1B51E}
+	EndGlobalSection
+EndGlobal
