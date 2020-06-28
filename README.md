@@ -1,7 +1,9 @@
-# IdentityServer4-Example
+# Getting Started with IdentityServer4
 Example IdentityServer4 implementation, including basic API and client application.
 
-This is the completed sample code for the [Getting Started with IdentityServer 4](https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4) tutorial.
+This is the completed sample code for the [Getting Started with IdentityServer4](https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4) tutorial.
+
+## Further Reading
 
 For more advanced use cases, check out some of my other articles to learn how to:
 - [Choose the right architecture for protecting your SPA](https://www.scottbrady91.com/OAuth/Cheat-Sheet-OAuth-for-Browser-Based-Applications)
