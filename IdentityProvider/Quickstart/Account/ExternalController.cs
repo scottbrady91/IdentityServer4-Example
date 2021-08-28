@@ -18,6 +18,7 @@ using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Services;
 using Duende.IdentityServer.Stores;
 using Duende.IdentityServer.Test;
+using Microsoft.AspNetCore.Identity;
 
 namespace IdentityServerHost.Quickstart.UI
 {
@@ -25,26 +26,25 @@ namespace IdentityServerHost.Quickstart.UI
     [AllowAnonymous]
     public class ExternalController : Controller
     {
-        private readonly TestUserStore _users;
         private readonly IIdentityServerInteractionService _interaction;
         private readonly IClientStore _clientStore;
         private readonly ILogger<ExternalController> _logger;
         private readonly IEventService _events;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public ExternalController(
             IIdentityServerInteractionService interaction,
             IClientStore clientStore,
             IEventService events,
             ILogger<ExternalController> logger,
-            TestUserStore users = null)
+            UserManager<IdentityUser> userManager)
         {
-            // this is where you would plug in your own custom identity management library (e.g. ASP.NET Identity)
-            _users = users ?? throw new Exception("Please call 'AddTestUsers(TestUsers.Users)' on the IIdentityServerBuilder in Startup or remove the TestUserStore from the AccountController.");
-
             _interaction = interaction;
             _clientStore = clientStore;
             _logger = logger;
             _events = events;
+
+            _userManager = userManager;
         }
 
         /// <summary>
@@ -96,13 +96,13 @@ namespace IdentityServerHost.Quickstart.UI
             }
 
             // lookup our user and external provider info
-            var (user, provider, providerUserId, claims) = FindUserFromExternalProvider(result);
+            var (user, provider, providerUserId, claims) = await FindUserFromExternalProvider(result);
             if (user == null)
             {
                 // this might be where you might initiate a custom workflow for user registration
                 // in this sample we don't show how that would be done, as our sample implementation
                 // simply auto-provisions new external user
-                user = AutoProvisionUser(provider, providerUserId, claims);
+                user = await AutoProvisionUser(provider, providerUserId, claims);
             }
 
             // this allows us to collect any additional claims or properties
@@ -113,9 +113,9 @@ namespace IdentityServerHost.Quickstart.UI
             ProcessLoginCallback(result, additionalLocalClaims, localSignInProps);
             
             // issue authentication cookie for user
-            var isuser = new IdentityServerUser(user.SubjectId)
+            var isuser = new IdentityServerUser(user.Id)
             {
-                DisplayName = user.Username,
+                DisplayName = user.UserName,
                 IdentityProvider = provider,
                 AdditionalClaims = additionalLocalClaims
             };
@@ -130,7 +130,7 @@ namespace IdentityServerHost.Quickstart.UI
 
             // check if external login is in the context of an OIDC request
             var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.SubjectId, user.Username, true, context?.Client.ClientId));
+            await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, user.UserName, true, context?.Client.ClientId));
 
             if (context != null)
             {
@@ -145,7 +145,7 @@ namespace IdentityServerHost.Quickstart.UI
             return Redirect(returnUrl);
         }
 
-        private (TestUser user, string provider, string providerUserId, IEnumerable<Claim> claims) FindUserFromExternalProvider(AuthenticateResult result)
+        private async Task<(IdentityUser user, string provider, string providerUserId, IEnumerable<Claim> claims)> FindUserFromExternalProvider(AuthenticateResult result)
         {
             var externalUser = result.Principal;
 
@@ -164,14 +164,19 @@ namespace IdentityServerHost.Quickstart.UI
             var providerUserId = userIdClaim.Value;
 
             // find external user
-            var user = _users.FindByExternalProvider(provider, providerUserId);
+            var user = await _userManager.FindByLoginAsync(provider, providerUserId);
 
             return (user, provider, providerUserId, claims);
         }
 
-        private TestUser AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
+        private async Task<IdentityUser> AutoProvisionUser(string provider, string providerUserId, IEnumerable<Claim> claims)
         {
-            var user = _users.AutoProvisionUser(provider, providerUserId, claims.ToList());
+            // create dummy internal account (you can do something more complex)
+            var user = new IdentityUser(Guid.NewGuid().ToString());
+            await _userManager.CreateAsync(user);
+
+            // add external user ID to new account
+            await _userManager.AddLoginAsync(user, new UserLoginInfo(provider, providerUserId, provider));
             return user;
         }
 
