@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Security.Claims;
+using Duende.IdentityServer;
+using Duende.IdentityServer.Models;
+using Duende.IdentityServer.Test;
 using IdentityModel;
-using IdentityServer4;
-using IdentityServer4.Models;
-using IdentityServer4.Test;
 
 namespace IdentityProvider
 {
@@ -19,7 +19,7 @@ namespace IdentityProvider
                     ClientName = "Example client application using client credentials",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     ClientSecrets = new List<Secret> {new Secret("SuperSecretPassword".Sha256())}, // change me!
-                    AllowedScopes = new List<string> {"api1.read", "api1.write"}
+                    AllowedScopes = new List<string> {"api1.read"}
                 },
                 new Client
                 {
