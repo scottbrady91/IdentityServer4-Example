@@ -11,13 +11,11 @@ namespace IdentityProvider
 {
     public class Startup
     {
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
 
-            const string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;database=Test.IdentityServer4.EntityFramework;trusted_connection=yes;";
+            // using local db (assumes Visual Studio has been installed)
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddDbContext<ApplicationDbContext>(builder =>
@@ -26,7 +24,7 @@ namespace IdentityProvider
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
-            IIdentityServerBuilder ids = services.AddIdentityServer()
+            IIdentityServerBuilder identityServerBuilder = services.AddIdentityServer()
                 .AddDeveloperSigningCredential();
 
             // in-memory client and scope stores
@@ -36,7 +34,7 @@ namespace IdentityProvider
                 .AddInMemoryApiScopes(Resources.GetApiScopes());*/
 
             // EF client, scope, and persisted grant stores
-            ids.AddOperationalStore(options =>
+            identityServerBuilder.AddOperationalStore(options =>
                     options.ConfigureDbContext = builder =>
                         builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)))
                 .AddConfigurationStore(options =>
@@ -44,10 +42,9 @@ namespace IdentityProvider
                         builder.UseSqlServer(connectionString, sqlOptions => sqlOptions.MigrationsAssembly(migrationsAssembly)));
             
             // ASP.NET Identity integration
-            ids.AddAspNetIdentity<IdentityUser>();
+            identityServerBuilder.AddAspNetIdentity<IdentityUser>();
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
             app.UseDeveloperExceptionPage();
@@ -63,6 +60,10 @@ namespace IdentityProvider
             app.UseEndpoints(endpoints => endpoints.MapDefaultControllerRoute());
         }
 
+        /// <summary>
+        /// A small bootstrapping method that will run EF migrations against the database
+        /// and create your test data.
+        /// </summary>
         private static void InitializeDbTestData(IApplicationBuilder app)
         {
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope())
