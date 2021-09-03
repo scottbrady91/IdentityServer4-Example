@@ -1,7 +1,10 @@
-# Getting Started with IdentityServer4
-Example IdentityServer4 implementation, including basic API and client application.
+# Getting Started with IdentityServer4 and Duende IdentityServer
+Example IdentityServer implementation, including a basic API (protected resource) and MVC app (client application).
 
-This is the completed sample code for the [Getting Started with IdentityServer4](https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4) tutorial.
+This is the completed sample code for the [Getting Started with IdentityServer4 and Duende IdentityServer](https://www.scottbrady91.com/Identity-Server/Getting-Started-with-IdentityServer-4) tutorial on scottbrady91.com.
+
+- [IdentityServer4 example code](https://github.com/scottbrady91/IdentityServer4-Example/tree/IdentityServer4)
+- [Duende IdentityServer example code](https://github.com/scottbrady91/IdentityServer4-Example/tree/master)
 
 ## Further Reading
 
