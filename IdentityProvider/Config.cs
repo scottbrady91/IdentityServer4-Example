@@ -1,10 +1,3 @@
-using System.Collections.Generic;
-using System.Security.Claims;
-using Duende.IdentityServer;
-using Duende.IdentityServer.Models;
-using Duende.IdentityServer.Test;
-using IdentityModel;
-
 namespace IdentityProvider
 {
     internal class Clients
