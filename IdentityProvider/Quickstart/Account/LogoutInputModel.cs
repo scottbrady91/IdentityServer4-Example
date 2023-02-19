@@ -1,11 +1,9 @@
 ﻿// Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
+namespace IdentityServerHost.Quickstart.UI;
 
-namespace IdentityServerHost.Quickstart.UI
+public class LogoutInputModel
 {
-    public class LogoutInputModel
-    {
-        public string LogoutId { get; set; }
-    }
+    public string LogoutId { get; set; }
 }

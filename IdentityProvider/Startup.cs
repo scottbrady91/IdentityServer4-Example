@@ -1,13 +1,3 @@
-using System.Linq;
-using System.Reflection;
-using Duende.IdentityServer.EntityFramework.DbContexts;
-using Duende.IdentityServer.EntityFramework.Mappers;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-
 namespace IdentityProvider
 {
     public class Startup
@@ -17,7 +7,7 @@ namespace IdentityProvider
             services.AddControllersWithViews();
 
             // using local db (assumes Visual Studio has been installed)
-            const string connectionString = @"Data Source=(LocalDb)\MSSQLLocalDB;database=Test.IdentityServer.EntityFramework;trusted_connection=yes;";
+            const string connectionString = @"server=localhost,1433;database=IdentityServer.Test;user id=sa;password=someStr0ng#Password;trusted_connection=yes;integrated security=false;";
             var migrationsAssembly = typeof(Startup).GetTypeInfo().Assembly.GetName().Name;
 
             services.AddDbContext<ApplicationDbContext>(builder =>
